@@ -1,0 +1,11 @@
+.env
+*.db
+*.log
+*.jsonl
+__pycache__/
+*.pyc
+data/training/
+bridge/wxauto4/
+bridge/__pycache__/
+*.db-shm
+*.db-wal

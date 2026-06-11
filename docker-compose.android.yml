@@ -1,0 +1,20 @@
+# Android Emulator in Docker — 用于跑微信
+# 通过 VNC 查看界面，ADB 自动化控制
+services:
+  android:
+    image: budtmo/docker-android:emulator_14.0
+    privileged: true
+    ports:
+      - "6080:6080"   # noVNC Web 界面 → http://localhost:6080
+      - "5554:5554"   # ADB
+      - "5555:5555"   # ADB
+    environment:
+      - EMULATOR_DEVICE=Samsung Galaxy S10
+      - WEB_VNC=true
+      - EMULATOR_ADDITIONAL_ARGS=-memory 2048 -no-snapshot
+    volumes:
+      - android_data:/data
+    restart: unless-stopped
+
+volumes:
+  android_data:
