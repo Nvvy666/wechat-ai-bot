@@ -8,7 +8,8 @@ from .ui_logs import create_logs_tab
 from .ui_contacts import create_contacts_tab
 from .ui_history import create_history_tab
 from .ui_config import create_config_tab
-from .ui_training import create_training_tab
+from .ui_emojis import create_emoji_tab
+from .ui_memories import create_memories_tab
 
 
 def create_ui(on_start=None, on_stop=None):
@@ -51,12 +52,12 @@ def create_ui(on_start=None, on_stop=None):
             comps = create_config_tab()
             components["config"] = comps
 
-        with gr.Tab("人格训练"):
-            comps = create_training_tab()
-            components["training"] = comps
+        with gr.Tab("表情包"):
+            comps = create_emoji_tab()
+            components["emojis"] = comps
 
-        # 定时刷新日志（每5秒）
-        if "auto_refresh_fn" in components.get("logs", {}):
-            pass  # Gradio 定时器在外部处理
+        with gr.Tab("记忆"):
+            comps = create_memories_tab()
+            components["memories"] = comps
 
     return app, components, theme

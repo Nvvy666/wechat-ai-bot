@@ -14,7 +14,9 @@ class ChatMonitor:
     chat_type: str  # 'contact' | 'group'
     adapter: "WeChatAdapter"
     running: bool = False
-    on_message: Optional[Callable] = None  # (monitor, sender, content) -> None
+    on_message: Optional[Callable] = None
+    # Signature: (monitor, sender, content, is_image=False, msg_control=None,
+    #             is_group=False, is_at=False, hwnd=0) -> None
 
     @abstractmethod
     def start(self) -> bool:
@@ -53,6 +55,10 @@ class WeChatAdapter(ABC):
     def send_message(self, target: str, text: str) -> bool:
         """发送文字消息"""
         ...
+
+    def send_file(self, target: str, filepath: str) -> bool:
+        """发送文件/图片"""
+        return False
 
     @abstractmethod
     def open_chat_monitor(self, name: str, chat_type: str = "contact") -> Optional[ChatMonitor]:

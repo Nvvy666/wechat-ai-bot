@@ -54,21 +54,37 @@ class Config:
         set_setting(key, value)
         os.environ[key] = value
 
-    # ---- LLM ----
+    # ---- LLM (优先 DB 多配置) ----
     @property
     def llm_api_key(self) -> str:
+        from database import get_active_llm_config
+        cfg = get_active_llm_config()
+        if cfg and cfg.get("api_key"):
+            return cfg["api_key"]
         return self._resolve("LLM_API_KEY", "LLM_API_KEY", "")
 
     @property
     def llm_base_url(self) -> str:
+        from database import get_active_llm_config
+        cfg = get_active_llm_config()
+        if cfg and cfg.get("base_url"):
+            return cfg["base_url"]
         return self._resolve("LLM_BASE_URL", "LLM_BASE_URL", "https://api.deepseek.com/v1")
 
     @property
     def llm_model(self) -> str:
+        from database import get_active_llm_config
+        cfg = get_active_llm_config()
+        if cfg and cfg.get("model"):
+            return cfg["model"]
         return self._resolve("LLM_MODEL", "LLM_MODEL", "deepseek-chat")
 
     @property
     def llm_max_tokens(self) -> int:
+        from database import get_active_llm_config
+        cfg = get_active_llm_config()
+        if cfg and cfg.get("max_tokens"):
+            return int(cfg["max_tokens"])
         return int(self._resolve("LLM_MAX_TOKENS", "LLM_MAX_TOKENS", "400"))
 
     # ---- Reply Strategy ----
@@ -88,6 +104,23 @@ class Config:
     def reply_cooldown(self) -> int:
         """同一联系人两次回复的最小间隔(秒)"""
         return int(self._resolve("REPLY_COOLDOWN", "REPLY_COOLDOWN", "30"))
+
+    # ---- Vision ----
+    @property
+    def vision_mode(self) -> str:
+        """
+        图片识别模式:
+          "lightweight" - OCR 提取文字 → 文本 LLM
+          "vision"      - 截图直接送多模态 VL 模型
+          "auto"        - 有 VL 模型就用，否则用 OCR
+        """
+        return self._resolve("VISION_MODE", "VISION_MODE", "lightweight")
+
+    @property
+    def ocr_prefer_paddle(self) -> bool:
+        """是否优先使用 PaddleOCR (False = 直接使用 RapidOCR)"""
+        val = self._resolve("OCR_ENGINE", "OCR_ENGINE", "paddle")
+        return val.lower() != "rapid"
 
     # ---- Personality ----
     @property

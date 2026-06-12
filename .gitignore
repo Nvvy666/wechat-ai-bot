@@ -1,11 +1,58 @@
+# === 隐私 & 密钥 ===
 .env
-*.db
+*.pem
+*.key
+credentials.json
+*-secret.yml
+
+# === 数据文件 (含个人聊天记录) ===
+data/chats/*
+!data/chats/.gitkeep
+data/messages.json
+data/logs.json
+data/memories.json
+data/contacts.json
+data/settings.json
+data/configs.json
+data/profiles.json
+data/emojis.json
+data/temp/*
+!data/temp/.gitkeep
+data/training/
+data/*.db
+data/*.db-*
+
+# === 日志 ===
 *.log
+*.log.*
 *.jsonl
+
+# === Python ===
+venv/
+env/
+.venv/
 __pycache__/
 *.pyc
-data/training/
-bridge/wxauto4/
-bridge/__pycache__/
-*.db-shm
-*.db-wal
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# === 表情包 (个人的) ===
+emojis/*.gif
+emojis/*.png
+emojis/*.jpg
+emojis/*.jpeg
+emojis/*.bmp
+emojis/*.webp

@@ -1,24 +1,37 @@
 @echo off
 chcp 65001 >nul
-title WeChat AI Bot v4
+title WeChat AI Bot
+
+cd /d "%~dp0"
 
 echo ==========================================
-echo   WeChat AI Bot v4
+echo   WeChat AI Bot
 echo ==========================================
 echo.
 
-echo [1/3] Checking dependencies...
-pip install -r requirements.txt --quiet 2>nul
-if %errorlevel% neq 0 (
-    echo [WARN] Some dependencies may be missing
+:: 检查 .env
+if not exist ".env" (
+    echo [ERROR] 未找到 .env 文件！
+    echo   请先运行 setup.bat 进行初始化
+    pause
+    exit /b 1
 )
 
-echo [2/3] Starting bot...
+:: 使用虚拟环境
+if exist "venv\Scripts\python.exe" (
+    set PYTHON=venv\Scripts\python.exe
+    echo [OK] 使用项目虚拟环境
+) else (
+    set PYTHON=python
+    echo [WARN] 未找到虚拟环境，使用系统 Python
+    echo   建议先运行 setup.bat
+)
+
 echo.
-echo   Web UI will open at http://localhost:7860
-echo   Press Ctrl+C in this window to stop
+echo   Web UI: http://localhost:7860
+echo   按 Ctrl+C 停止
 echo.
 
-python app.py
+%PYTHON% app.py
 
 pause
